@@ -1,0 +1,38 @@
+# SPDX-License-Identifier: CC0-1.0
+# SPDX-FileCopyrightText: 2025 Jonas Tobias Hopusch <git@jotoho.de>
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    schedule:
+      interval: "weekly"
+    directory: "/"
+    assignees:
+      - "jotoho"
+    groups:
+      compatible:
+        update-types:
+          - "patch"
+          - "minor"
+  - package-ecosystem: "github-actions"
+    schedule:
+      interval: "weekly"
+    directory: "/"
+    assignees:
+      - "jotoho"
+    groups:
+      compatible:
+        update-types:
+          - "patch"
+          - "minor"
+  - package-ecosystem: "pip"
+    schedule:
+      interval: "weekly"
+    directory: "/functions/invite-to-team/"
+    assignees:
+      - "jotoho"
+    groups:
+      compatible:
+        update-types:
+          - "patch"
+          - "minor"
