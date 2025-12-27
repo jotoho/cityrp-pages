@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 import injectHTML from 'vite-plugin-html-inject';
 import { stripHTMLComments } from "@zade/vite-plugin-strip-html-comments";
 import { execSync } from "node:child_process";
+import { dirname, resolve } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
