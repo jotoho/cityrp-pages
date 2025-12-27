@@ -5,10 +5,17 @@ SPDX-FileCopyrightText: 2025 Jonas Tobias Hopusch <git@jotoho.de>
 
 main>table#plots {
     border: 1px solid var(--color-primary);
-    overflow-y: auto;
-    overflow-x: hidden;
+    display: block !important;
+    overflow: auto;
     width: fit-content;
     height: fit-content;
+    max-width: 100%;
+    max-height: 100%;
+
+    & * {
+        width: max-content;
+        height: max-content;
+    }
 
     &,
     & :is(thead, tbody, th, tr, td) {
