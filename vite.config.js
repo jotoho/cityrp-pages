@@ -6,9 +6,17 @@ import injectHTML from 'vite-plugin-html-inject';
 import { stripHTMLComments } from "@zade/vite-plugin-strip-html-comments";
 import { execSync } from "node:child_process";
 
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig({
 	plugins: [injectHTML(), stripHTMLComments()],
 	build: {
+	    rollupOptions: {
+	        input: {
+	            index: resolve(__dirname, "./index.html"),
+	            rentalregistry: resolve(__dirname, "./rentalregistry.html"),
+	        },
+	    },
 		target: 'es2024',
 		sourcemap: true,
 	},
