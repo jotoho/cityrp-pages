@@ -1,0 +1,36 @@
+main>table#plots {
+    border: 1px solid var(--color-primary);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: fit-content;
+    height: fit-content;
+
+    &,
+    & :is(thead, tbody, th, tr, td) {
+        border-collapse: collapse;
+    }
+
+    >thead {
+        border: 1px solid var(--color-primary);
+    }
+
+    >tbody {
+        &>tr:not(:first-child) {
+            border-top: 1px solid var(--color-primary);
+        }
+    }
+
+    & td,
+    & th {
+        padding: .5em;
+    }
+
+    td:is(.rentprice, .rentduration, .rentavgprice) {
+        text-align: right;
+    }
+
+    td.regionlabels:empty::after {
+        content: "none";
+        font-style: italic;
+    }
+}

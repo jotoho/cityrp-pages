@@ -25,14 +25,3 @@ updates:
         update-types:
           - "patch"
           - "minor"
-  - package-ecosystem: "pip"
-    schedule:
-      interval: "weekly"
-    directory: "/functions/invite-to-team/"
-    assignees:
-      - "jotoho"
-    groups:
-      compatible:
-        update-types:
-          - "patch"
-          - "minor"
