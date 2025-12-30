@@ -95,5 +95,21 @@ SPDX-FileCopyrightText: 2025 Jonas Tobias Hopusch <git@jotoho.de>
             text-align: center;
             font-size: xx-small;
         }
+
+        p {
+            margin-top: 1em;
+            margin-bottom: 1em;
+        }
+
+        ul, ol {
+            padding-left: 1.5em;
+        }
+
+        hr {
+            background-color: var(--color-primary);
+            height: max(1px, .5mm);
+            margin-top: 2em;
+            margin-bottom: 2em;
+        }
     }
 }
