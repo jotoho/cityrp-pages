@@ -3,25 +3,117 @@ SPDX-License-Identifier: AGPL-3.0-only
 SPDX-FileCopyrightText: 2025 Jonas Tobias Hopusch <git@jotoho.de>
 */
 
+/*
+ * Kanit is self-hosted through @fontsource so that the strict
+ * `default-src 'self'` content-security-policy in partials/meta.html can stay
+ * as it is. Vite rewrites these into same-origin asset URLs.
+ */
+@import '@fontsource/kanit/400.css';
+@import '@fontsource/kanit/500.css';
+@import '@fontsource/kanit/600.css';
+@import '@fontsource/kanit/700.css';
+@import '@fontsource/kanit/800.css';
+
 :root {
+    /* ── Design tokens ───────────────────────────────────────────────── */
+    --accent: #FFB600;
+    --accent-hover: #FFD050;
+    --accent-rgb: 255, 182, 0;
+    --blue-rgb: 50, 138, 241;
+    --danger: #f87171;
+
+    --radius-sm: 6px;
+    --radius: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+
+    --ease: cubic-bezier(.2, .8, .2, 1);
+
+    /*
+     * Dark is the canonical look — it matches the CityRP dashboard and the
+     * cityrp.org forums — so it is the default rather than an opt-in.
+     * The header toggle flips `data-theme` on <html>, which flips
+     * `color-scheme`, which is what every light-dark() pair below reads.
+     */
+    color-scheme: dark;
+
+    &[data-theme='light'] {
+        color-scheme: light;
+    }
+
+    /* The toggle shows the icon of the theme it would switch you TO. */
+    & .theme-toggle>.icon-moon {
+        display: none;
+    }
+
+    &[data-theme='light'] .theme-toggle {
+        >.icon-sun {
+            display: none;
+        }
+
+        >.icon-moon {
+            display: block;
+        }
+    }
+
+    --bg: light-dark(hsl(215, 40%, 97%), hsl(221, 29%, 11%));
+    --surface: light-dark(#ffffff, hsl(218, 31%, 17%));
+    --surface-alt: light-dark(hsl(215, 38%, 94%), hsl(218, 28%, 14%));
+    --surface-hover: light-dark(rgba(var(--blue-rgb), 0.07), rgba(var(--blue-rgb), 0.06));
+    --text: light-dark(hsl(221, 33%, 22%), rgba(186, 217, 252, 0.85));
+    --text-strong: light-dark(hsl(221, 40%, 13%), rgba(186, 217, 252, 0.95));
+    --text-muted: light-dark(hsl(221, 18%, 42%), rgba(186, 217, 252, 0.45));
+    --text-faint: light-dark(hsl(221, 14%, 52%), rgba(186, 217, 252, 0.3));
+    --border: light-dark(rgba(var(--blue-rgb), 0.22), rgba(var(--blue-rgb), 0.15));
+    --border-strong: light-dark(rgba(var(--blue-rgb), 0.38), rgba(var(--blue-rgb), 0.25));
+    --border-subtle: light-dark(rgba(var(--blue-rgb), 0.14), rgba(var(--blue-rgb), 0.08));
+
+    /* Gold has to darken in light mode to stay legible on white. */
+    --accent: light-dark(#9A6D00, #FFB600);
+    --accent-hover: light-dark(#7A5600, #FFD050);
+
+    --shadow-card: 0 10px 30px light-dark(rgba(23, 43, 77, 0.10), rgba(0, 0, 0, 0.4));
+    --glow-top: light-dark(rgba(var(--blue-rgb), 0.10), rgba(var(--blue-rgb), 0.10));
+    --glow-bottom: light-dark(rgba(var(--accent-rgb), 0.07), rgba(30, 80, 180, 0.06));
+    --page-glow:
+        radial-gradient(ellipse 80% 40% at 50% -5%, var(--glow-top) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, var(--glow-bottom), transparent);
+
+    /* Back-compat aliases for the original two-token palette. */
+    --color-primary: var(--text);
+    --color-background: var(--bg);
+
     min-height: 100vh;
-    min-width: 100vw;
-    max-height: 100%;
     max-width: 100%;
     overflow-x: hidden;
     overflow-y: auto;
-    background: var(--color-background);
-    font-family: serif;
-    font-size: normal;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Kanit', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    accent-color: var(--accent);
 
-    @media (prefers-color-scheme: light) {
-        --color-primary: black;
-        --color-background: white;
+    /* Themed scrollbars, ported from the dashboard's .themed-scroll */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(var(--blue-rgb), 0.25) transparent;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
     }
 
-    @media (prefers-color-scheme: dark) {
-        --color-primary: white;
-        --color-background: black;
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(var(--blue-rgb), 0.25);
+        border-radius: 99px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: rgba(var(--blue-rgb), 0.45);
     }
 
     &,
@@ -32,84 +124,325 @@ SPDX-FileCopyrightText: 2025 Jonas Tobias Hopusch <git@jotoho.de>
         box-sizing: border-box;
     }
 
+    a:visited {
+        color: inherit;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+        &,
+        & *,
+        & *::before,
+        & *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+
     >body {
+        position: relative;
         display: flex;
         flex-direction: column;
         flex-wrap: nowrap;
         width: 100%;
-        height: 100%;
+        min-height: 100vh;
+        background-image: var(--page-glow);
+        background-attachment: fixed;
 
         &>* {
             width: 100%;
             flex-grow: 0;
-            overflow: hidden;
         }
 
+        /* ── Topbar ──────────────────────────────────────────────────── */
         &>header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            border-bottom: max(.5mm, 1px) solid var(--color-primary);
-            justify-items: center;
             align-items: center;
-            max-width: 100%;
-            font-size: x-large;
+            gap: 8px;
+            padding: 12px clamp(16px, 4vw, 32px);
+            border-bottom: 1px solid var(--border-subtle);
+            background: color-mix(in srgb, var(--bg) 88%, transparent);
+            backdrop-filter: blur(16px);
 
-            &>*,
-            &>nav>* {
-                display: block;
-                flex-grow: 1;
-                flex-basis: 0;
-                text-align: center;
-                align-content: center;
-                text-wrap-mode: nowrap;
+            &>h1 {
+                flex: 1 1 auto;
+                font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+                font-weight: 800;
+                letter-spacing: -0.01em;
+                line-height: 1.2;
+                color: var(--text-strong);
+
+                /* Gold accent bar, echoing the dashboard's active nav item. */
+                padding-left: 14px;
+                border-left: 3px solid var(--accent);
             }
 
             &>nav {
-                display: contents !important;
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
 
                 &>a {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 8px 14px;
+                    border-radius: var(--radius);
+                    border: 1px solid transparent;
+                    color: var(--text-muted);
+                    font-size: 0.8125rem;
+                    font-weight: 600;
                     text-decoration-line: none;
+                    white-space: nowrap;
+                    transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+
+                    &:hover {
+                        background: var(--surface-hover);
+                        color: var(--text-strong);
+                        border-color: rgba(var(--blue-rgb), 0.12);
+                    }
+
+                    &:focus-visible {
+                        outline: 2px solid var(--accent);
+                        outline-offset: 2px;
+                    }
+
+                    /* Marks the page you are currently on. */
+                    &[aria-current='page'] {
+                        background: rgba(var(--accent-rgb), 0.12);
+                        border-color: rgba(var(--accent-rgb), 0.2);
+                        color: var(--accent);
+                    }
                 }
             }
 
-            &>h1 {
-                font-size: xx-large;
+            /* ── Light/dark toggle ───────────────────────────────────── */
+            &>.theme-toggle {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                width: 36px;
+                height: 36px;
+                border-radius: var(--radius);
+                border: 1px solid var(--border-subtle);
+                background: var(--surface-hover);
+                color: var(--text-muted);
+                cursor: pointer;
+                transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
+
+                &:hover {
+                    background: rgba(var(--accent-rgb), 0.1);
+                    border-color: rgba(var(--accent-rgb), 0.28);
+                    color: var(--accent);
+                }
+
+                &:focus-visible {
+                    outline: 2px solid var(--accent);
+                    outline-offset: 2px;
+                }
+
+                & svg {
+                    width: 18px;
+                    height: 18px;
+                    display: block;
+                }
             }
         }
 
+        /* ── Main content card ───────────────────────────────────────── */
         &>main {
             flex-basis: content;
             flex-grow: 1;
-            width: max-content;
+            width: 100%;
             max-width: min(80em, 100%);
-            border-left: max(.5mm, 1px) solid var(--color-primary);
-            border-right: max(.5mm, 1px) solid var(--color-primary);
-            margin-left: auto;
-            margin-right: auto;
-            padding: 1em;
+            margin: clamp(16px, 3vw, 32px) auto;
+            padding: clamp(20px, 3vw, 32px);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+
+            @media (width <=52em) {
+                margin: 0;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
         }
 
         &>footer {
-            border-top: max(.5mm, 1px) solid var(--color-primary);
+            padding: 20px 16px 28px;
+            border-top: 1px solid var(--border-subtle);
             text-align: center;
-            font-size: xx-small;
+            text-wrap: balance;
+            color: var(--text-faint);
+            font-size: 0.75rem;
+
+            a {
+                color: var(--accent);
+                font-weight: 600;
+                text-decoration-line: none;
+
+                &:hover {
+                    color: var(--accent-hover);
+                    text-decoration-line: underline;
+                }
+            }
+        }
+
+        /* ── Typography ──────────────────────────────────────────────── */
+        h2 {
+            font-size: 1.375rem;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--text-strong);
+            margin-bottom: .5em;
+        }
+
+        h3 {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--text-strong);
+            margin-bottom: .35em;
         }
 
         p {
             margin-top: 1em;
             margin-bottom: 1em;
+            max-width: 68ch;
         }
 
-        ul, ol {
+        ul,
+        ol {
             padding-left: 1.5em;
+            margin: 1em 0;
+            max-width: 68ch;
+
+            li {
+                margin-bottom: .35em;
+
+                &::marker {
+                    color: var(--accent);
+                }
+            }
+        }
+
+        /* Inline prose links. Tiles are anchors too, but style themselves. */
+        main a:not(.tile) {
+            color: var(--accent);
+            font-weight: 600;
+            text-decoration-line: none;
+
+            &:hover {
+                color: var(--accent-hover);
+                text-decoration-line: underline;
+            }
         }
 
         hr {
-            background-color: var(--color-primary);
-            height: max(1px, .5mm);
+            background: linear-gradient(90deg,
+                transparent,
+                var(--border-strong),
+                transparent);
+            height: 1px;
             margin-top: 2em;
             margin-bottom: 2em;
+        }
+
+        code,
+        kbd {
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.85em;
+            background: rgba(var(--blue-rgb), 0.1);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: .1em .4em;
+        }
+
+        /* ── Tile grid, ported from the dashboard's .app-card-tile ───── */
+        .tile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+            gap: 14px;
+            margin-top: 1.5em;
+            padding-left: 0;
+            max-width: none;
+            list-style: none;
+        }
+
+        .tile {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 18px;
+            border-radius: var(--radius-md);
+            background: var(--surface-alt);
+            border: 1px solid rgba(var(--blue-rgb), 0.12);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.18s var(--ease),
+                border-color 0.18s var(--ease),
+                background 0.18s var(--ease),
+                box-shadow 0.18s var(--ease);
+
+            &::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(ellipse at top, rgba(var(--accent-rgb), 0.06), transparent 70%);
+                opacity: 0;
+                transition: opacity 0.2s ease;
+                pointer-events: none;
+            }
+
+            &:hover {
+                border-color: rgba(var(--accent-rgb), 0.3);
+                background: rgba(var(--accent-rgb), 0.04);
+                transform: translateY(-3px);
+                box-shadow: var(--shadow-card);
+            }
+
+            &:hover::before {
+                opacity: 1;
+            }
+
+            &:focus-visible {
+                outline: 2px solid var(--accent);
+                outline-offset: 2px;
+            }
+
+            .tile-name {
+                font-size: 0.9375rem;
+                font-weight: 700;
+                color: var(--text-strong);
+            }
+
+            .tile-desc {
+                margin: 0;
+                font-size: 0.8125rem;
+                font-weight: 400;
+                line-height: 1.45;
+                color: var(--text-muted);
+            }
+
+            .tile-tag {
+                margin-top: 4px;
+                font-size: 0.625rem;
+                font-weight: 700;
+                letter-spacing: 0.12em;
+                text-transform: uppercase;
+                color: var(--text-faint);
+            }
         }
     }
 }

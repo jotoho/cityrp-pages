@@ -11,6 +11,17 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
 	plugins: [injectHTML()],
+	// Dev only. The API only sends its CORS header for the production origin,
+	// so a direct browser fetch from localhost is blocked. Proxying server-side
+	// sidesteps CORS entirely. Production builds still call the API directly.
+	server: {
+		proxy: {
+			"/api": {
+				target: "https://cityrp.api.jotoho.de",
+				changeOrigin: true,
+			},
+		},
+	},
 	build: {
 	    rollupOptions: {
 	        input: {
