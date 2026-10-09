@@ -121,6 +121,6 @@ fetch("https://cityrp.api.jotoho.de/api/rentals/plots").then(async (response) =>
             ?.("click", generatePlotList.bind(this, plots, plotsContainer, SORT_LANDLORD), { passive: true });;
     }
     else if (plotsContainer && plotsContainer.parentElement) {
-        plotsContainer.parentElement.outerHTML = `<p>Loading plot data failed! Contact MoSS.</p>`;
+        plotsContainer.parentElement.outerHTML = `<p>Loading plot data failed! Contact @jotoho.</p>`;
     }
 });
