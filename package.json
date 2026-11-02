@@ -11,8 +11,8 @@
   "devDependencies": {
     "jsr": "0.14.3",
     "prettier": "3.9.10",
-    "typescript-eslint": "8.71.2",
-    "vite": "8.3.4",
+    "typescript-eslint": "8.72.1",
+    "vite": "8.3.5",
     "vite-plugin-html-inject": "1.1.2"
   }
 }
